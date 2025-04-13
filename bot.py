@@ -249,8 +249,6 @@ class Polyflow:
             try:
                 async with ClientSession(connector=connector, timeout=ClientTimeout(total=60)) as session:
                     async with session.post(url=url, headers=headers, data=data) as response:
-                        self.log(response.status)
-                        self.log(await response.text())
                         response.raise_for_status()
                         result = await response.json()
                         return result['msg']
@@ -343,30 +341,6 @@ class Polyflow:
 
             self.log(f"{Fore.CYAN + Style.BRIGHT}Quest Lists:{Style.RESET_ALL}")
 
-            claim_reward = await self.claim_reward(token, proxy)
-            if claim_reward and claim_reward.get("message") == "Daily quest reward claimed successfully":
-                reward = claim_reward.get("points", "N/A")
-                self.log(
-                    f"{Fore.CYAN + Style.BRIGHT}    ● {Style.RESET_ALL}"
-                    f"{Fore.MAGENTA + Style.BRIGHT}Daily Reward{Style.RESET_ALL}"
-                    f"{Fore.GREEN + Style.BRIGHT} Is Claimed {Style.RESET_ALL}"
-                    f"{Fore.MAGENTA + Style.BRIGHT}-{Style.RESET_ALL}"
-                    f"{Fore.CYAN + Style.BRIGHT} Reward {Style.RESET_ALL}"
-                    f"{Fore.WHITE + Style.BRIGHT}{reward} PTS{Style.RESET_ALL}"
-                )
-            elif claim_reward and claim_reward.get("message") == "You've already received a Daily quest reward":
-                self.log(
-                    f"{Fore.CYAN + Style.BRIGHT}    ● {Style.RESET_ALL}"
-                    f"{Fore.MAGENTA + Style.BRIGHT}Daily Reward{Style.RESET_ALL}"
-                    f"{Fore.YELLOW + Style.BRIGHT} Already Claimed {Style.RESET_ALL}"
-                )
-            else:
-                self.log(
-                    f"{Fore.CYAN + Style.BRIGHT}    ● {Style.RESET_ALL}"
-                    f"{Fore.MAGENTA + Style.BRIGHT}Daily Reward{Style.RESET_ALL}"
-                    f"{Fore.RED + Style.BRIGHT} Not Claimed {Style.RESET_ALL}"
-                )
-
             daily_quests = await self.quest_lists(token, "daily", proxy)
             if daily_quests:
                 quests = daily_quests.get("quests", [])
@@ -413,6 +387,30 @@ class Polyflow:
                         f"{Fore.MAGENTA + Style.BRIGHT}Daily{Style.RESET_ALL}"
                         f"{Fore.RED + Style.BRIGHT} Quests Data Is None {Style.RESET_ALL}"
                     )
+
+            claim_reward = await self.claim_reward(token, proxy)
+            if claim_reward and claim_reward.get("message") == "Daily quest reward claimed successfully":
+                reward = claim_reward.get("points", "N/A")
+                self.log(
+                    f"{Fore.CYAN + Style.BRIGHT}    ● {Style.RESET_ALL}"
+                    f"{Fore.MAGENTA + Style.BRIGHT}Daily Reward{Style.RESET_ALL}"
+                    f"{Fore.GREEN + Style.BRIGHT} Is Claimed {Style.RESET_ALL}"
+                    f"{Fore.MAGENTA + Style.BRIGHT}-{Style.RESET_ALL}"
+                    f"{Fore.CYAN + Style.BRIGHT} Reward {Style.RESET_ALL}"
+                    f"{Fore.WHITE + Style.BRIGHT}{reward} PTS{Style.RESET_ALL}"
+                )
+            elif claim_reward and claim_reward.get("message") == "You've already received a Daily quest reward":
+                self.log(
+                    f"{Fore.CYAN + Style.BRIGHT}    ● {Style.RESET_ALL}"
+                    f"{Fore.MAGENTA + Style.BRIGHT}Daily Reward{Style.RESET_ALL}"
+                    f"{Fore.YELLOW + Style.BRIGHT} Already Claimed {Style.RESET_ALL}"
+                )
+            else:
+                self.log(
+                    f"{Fore.CYAN + Style.BRIGHT}    ● {Style.RESET_ALL}"
+                    f"{Fore.MAGENTA + Style.BRIGHT}Daily Reward{Style.RESET_ALL}"
+                    f"{Fore.RED + Style.BRIGHT} Not Claimed {Style.RESET_ALL}"
+                )
 
             tutorial_quests = await self.quest_lists(token, "tutorial", proxy)
             if tutorial_quests:
