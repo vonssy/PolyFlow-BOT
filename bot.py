@@ -7,6 +7,7 @@ from aiohttp_socks import ProxyConnector
 from fake_useragent import FakeUserAgent
 from eth_account import Account
 from eth_account.messages import encode_defunct
+from eth_utils import to_hex
 from datetime import datetime
 from colorama import *
 import asyncio, json, os, pytz
@@ -26,6 +27,7 @@ class Polyflow:
             "User-Agent": FakeUserAgent().random
         }
         self.BASE_API = "https://api-v2.polyflow.tech/api"
+        self.ref_code = "F20D96EFD9" # U can change it with yours.
         self.proxies = []
         self.proxy_index = 0
         self.account_proxies = {}
@@ -113,6 +115,7 @@ class Polyflow:
         try:
             account = Account.from_key(account)
             address = account.address
+
             return address
         except Exception as e:
             return None
@@ -121,13 +124,15 @@ class Polyflow:
         try:
             encoded_message = encode_defunct(text=message)
             signed_message = Account.sign_message(encoded_message, private_key=account)
-            signature = signed_message.signature.hex()
+            signature = to_hex(signed_message.signature)
+
             payload = {
                 "address":address,
-                "signature":f"0x{signature}",
+                "signature":signature,
                 "chain_id":1,
-                "referral_code":"F20D96EFD9"
+                "referral_code":self.ref_code
             }
+
             return payload
         except Exception as e:
             return None
