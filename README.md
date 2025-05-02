@@ -1,8 +1,8 @@
 # PolyFlow BOT
 PolyFlow BOT
 
-- Register Here : [PolyFlow](https://app.polyflow.tech/?refCode=F20D96EFD9)
-- Use Code      : F20D96EFD9
+- Register Here : [PolyFlow](https://app.polyflow.tech/?refCode=D5C6CA5E86)
+- Use Code      : D5C6CA5E86
 
 ## Features
 
@@ -12,6 +12,8 @@ PolyFlow BOT
   - Auto Run Without Proxy - Choose 3
   - Auto Complete Daily & Tutorial Quests
   - Multi Accounts
+
+### Note: For now, I made the bot bypass the scan to get tasks, because the risk of the account being banned is very high.
 
 ## Requiremnets
 

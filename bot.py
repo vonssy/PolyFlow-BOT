@@ -27,7 +27,7 @@ class Polyflow:
             "User-Agent": FakeUserAgent().random
         }
         self.BASE_API = "https://api-v2.polyflow.tech/api"
-        self.ref_code = "F20D96EFD9" # U can change it with yours.
+        self.ref_code = "D5C6CA5E86" # U can change it with yours.
         self.proxies = []
         self.proxy_index = 0
         self.account_proxies = {}
@@ -171,7 +171,7 @@ class Polyflow:
                     async with session.get(url=url, headers=self.headers) as response:
                         response.raise_for_status()
                         result = await response.json()
-                        return result['msg']['content']
+                        return result["msg"]["content"]
             except (Exception, ClientResponseError) as e:
                 if attempt < retries - 1:
                     await asyncio.sleep(5)
@@ -193,7 +193,7 @@ class Polyflow:
                     async with session.post(url=url, headers=headers, data=data) as response:
                         response.raise_for_status()
                         result = await response.json()
-                        return result['msg']['token']
+                        return result["msg"]["token"]
             except (Exception, ClientResponseError) as e:
                 if attempt < retries - 1:
                     await asyncio.sleep(5)
@@ -213,7 +213,7 @@ class Polyflow:
                     async with session.get(url=url, headers=headers) as response:
                         response.raise_for_status()
                         result = await response.json()
-                        return result['msg']
+                        return result["msg"]
             except (Exception, ClientResponseError) as e:
                 if attempt < retries - 1:
                     await asyncio.sleep(5)
@@ -233,7 +233,7 @@ class Polyflow:
                     async with session.get(url=url, headers=headers) as response:
                         response.raise_for_status()
                         result = await response.json()
-                        return result['msg']
+                        return result["msg"]
             except (Exception, ClientResponseError) as e:
                 if attempt < retries - 1:
                     await asyncio.sleep(5)
@@ -256,7 +256,7 @@ class Polyflow:
                     async with session.post(url=url, headers=headers, data=data) as response:
                         response.raise_for_status()
                         result = await response.json()
-                        return result['msg']
+                        return result["msg"]
             except (Exception, ClientResponseError) as e:
                 if attempt < retries - 1:
                     await asyncio.sleep(5)
@@ -276,9 +276,15 @@ class Polyflow:
             try:
                 async with ClientSession(connector=connector, timeout=ClientTimeout(total=60)) as session:
                     async with session.post(url=url, headers=headers, json={}) as response:
+                        if response.status == 500:
+                            return self.log(
+                                f"{Fore.CYAN + Style.BRIGHT}    ● {Style.RESET_ALL}"
+                                f"{Fore.MAGENTA + Style.BRIGHT}Daily Reward{Style.RESET_ALL}"
+                                f"{Fore.YELLOW + Style.BRIGHT} Not Eligible To Claim {Style.RESET_ALL}"
+                            )
                         response.raise_for_status()
                         result = await response.json()
-                        return result['msg']
+                        return result["msg"]
             except (Exception, ClientResponseError) as e:
                 if attempt < retries - 1:
                     await asyncio.sleep(5)
@@ -368,6 +374,14 @@ class Polyflow:
                                     f"{Fore.YELLOW + Style.BRIGHT} Already Completed {Style.RESET_ALL}"
                                 )
                                 continue
+                            
+                            elif quest_id == 6:
+                                self.log(
+                                    f"{Fore.CYAN + Style.BRIGHT}        > {Style.RESET_ALL}"
+                                    f"{Fore.WHITE + Style.BRIGHT}{title}{Style.RESET_ALL}"
+                                    f"{Fore.YELLOW + Style.BRIGHT} Skipped {Style.RESET_ALL}"
+                                )
+                                continue
 
                             complete = await self.complete_quests(token, quest_id, proxy)
                             if complete and complete.get("message", ) == "Quest completed successfully":
@@ -409,12 +423,6 @@ class Polyflow:
                     f"{Fore.CYAN + Style.BRIGHT}    ● {Style.RESET_ALL}"
                     f"{Fore.MAGENTA + Style.BRIGHT}Daily Reward{Style.RESET_ALL}"
                     f"{Fore.YELLOW + Style.BRIGHT} Already Claimed {Style.RESET_ALL}"
-                )
-            else:
-                self.log(
-                    f"{Fore.CYAN + Style.BRIGHT}    ● {Style.RESET_ALL}"
-                    f"{Fore.MAGENTA + Style.BRIGHT}Daily Reward{Style.RESET_ALL}"
-                    f"{Fore.RED + Style.BRIGHT} Not Claimed {Style.RESET_ALL}"
                 )
 
             tutorial_quests = await self.quest_lists(token, "tutorial", proxy)
