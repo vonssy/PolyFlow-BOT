@@ -13,7 +13,7 @@ PolyFlow BOT
   - Auto Complete Daily & Tutorial Quests
   - Multi Accounts
 
-### Note: For now, I made the bot bypass the scan to get tasks, because the risk of the account being banned is very high.
+### Note: For now, I made the bot to skipping the scan to earn task, because the risk of the account being banned is very high.
 
 ## Requiremnets
 
